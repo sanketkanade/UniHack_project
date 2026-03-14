@@ -9,6 +9,12 @@ export interface UserProfile {
   approximate_location: string;
   household_size: number;
   languages: string[];
+  phone?: string;
+  whatsapp?: string;
+  emergency_contact_name?: string;
+  emergency_contact_phone?: string;
+  preferred_contact_method?: "SMS" | "WhatsApp" | "Call" | "App";
+  telegram_username?: string;
   onboarding_complete: boolean;
   created_at: string;
 }

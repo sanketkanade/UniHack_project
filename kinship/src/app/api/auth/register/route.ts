@@ -18,6 +18,7 @@ export async function POST(req: NextRequest) {
       approximate_location,
       household_size,
       languages,
+      phone,
     } = body;
 
     // Validate required fields
@@ -88,10 +89,11 @@ export async function POST(req: NextRequest) {
         approximate_location: approximate_location || "",
         household_size: household_size || 1,
         languages: languages || ["English"],
+        phone: phone || null,
         onboarding_complete: false,
       })
       .select(
-        "id, name, email, suburb, postcode, lat, lng, approximate_location, household_size, languages, onboarding_complete, created_at"
+        "id, name, email, suburb, postcode, lat, lng, approximate_location, household_size, languages, phone, onboarding_complete, created_at"
       )
       .single();
 

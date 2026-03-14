@@ -181,11 +181,20 @@ export default function OnboardPage() {
   const [geoLocation, setGeoLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [locationStatus, setLocationStatus] = useState<string>("");
 
-  // Step 2 state
+  // Step 2 state (Contact Details)
+  const [phone, setPhone] = useState("");
+  const [whatsapp, setWhatsapp] = useState("");
+  const [whatsappSame, setWhatsappSame] = useState(false);
+  const [emergencyName, setEmergencyName] = useState("");
+  const [emergencyPhone, setEmergencyPhone] = useState("");
+  const [preferredMethod, setPreferredMethod] = useState<"SMS" | "WhatsApp" | "Call" | "App">("App");
+  const [telegram, setTelegram] = useState("");
+
+  // Step 3 state (Capabilities)
   const [selectedCaps, setSelectedCaps] = useState<string[]>([]);
   const [capFreeText, setCapFreeText] = useState("");
 
-  // Step 3 state
+  // Step 4 state (Needs)
   const [selectedNeeds, setSelectedNeeds] = useState<string[]>([]);
   const [needFreeText, setNeedFreeText] = useState("");
 
@@ -314,6 +323,12 @@ export default function OnboardPage() {
           approximate_location: approxLocation,
           household_size: householdSize,
           languages: selectedLanguages,
+          phone: phone,
+          whatsapp: whatsappSame ? phone : whatsapp,
+          emergency_contact_name: emergencyName,
+          emergency_contact_phone: emergencyPhone,
+          preferred_contact_method: preferredMethod,
+          telegram_username: telegram,
           raw_capabilities_text: capFreeText,
           raw_needs_text: needFreeText,
         }),
@@ -493,11 +508,24 @@ export default function OnboardPage() {
                   type="text" value={suburb} onChange={(e) => setSuburb(e.target.value)}
                   className="w-full rounded-xl border border-gray-200 px-4 py-3 focus:ring-2 focus:ring-accent/20 focus:border-accent transition-all outline-none"
                 />
+                <label className="block text-sm font-medium text-textDark mb-1">
+                  Suburb
+                </label>
+                <input
+                  type="text"
+                  value={suburb}
+                  onChange={(e) => setSuburb(e.target.value)}
+                  className="w-full rounded-xl border border-gray-200 px-4 py-3 focus:ring-2 focus:ring-accent/20 focus:border-accent transition-all outline-none"
+                />
               </div>
               <div>
-                <label className="block text-sm font-medium text-textDark mb-1">Postcode</label>
+                <label className="block text-sm font-medium text-textDark mb-1">
+                  Postcode
+                </label>
                 <input
-                  type="text" value={postcode} onChange={(e) => setPostcode(e.target.value)}
+                  type="text"
+                  value={postcode}
+                  onChange={(e) => setPostcode(e.target.value)}
                   className="w-full rounded-xl border border-gray-200 px-4 py-3 focus:ring-2 focus:ring-accent/20 focus:border-accent transition-all outline-none"
                 />
               </div>
@@ -519,21 +547,29 @@ export default function OnboardPage() {
                 placeholder="e.g., 12 Barkly St, Footscray"
               />
               <p className="mt-1.5 text-xs text-textMuted flex items-center gap-1">
-                <Lock size={11} /> Only suburb, postcode &amp; approximate location are saved — never your exact address
+                <Lock size={11} /> Only suburb, postcode &amp; approximate
+                location are saved — never your exact address
               </p>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-textDark mb-1">Household size</label>
+              <label className="block text-sm font-medium text-textDark mb-1">
+                Household size
+              </label>
               <input
-                type="number" min={1} max={10} value={householdSize}
+                type="number"
+                min={1}
+                max={10}
+                value={householdSize}
                 onChange={(e) => setHouseholdSize(parseInt(e.target.value) || 1)}
                 className="w-24 rounded-xl border border-gray-200 px-4 py-3 focus:ring-2 focus:ring-accent/20 focus:border-accent transition-all outline-none"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-textDark mb-2">Languages spoken</label>
+              <label className="block text-sm font-medium text-textDark mb-2">
+                Languages spoken
+              </label>
               <div className="flex flex-wrap gap-2">
                 {LANGUAGES.map((lang) => (
                   <button
@@ -545,7 +581,9 @@ export default function OnboardPage() {
                         : "bg-gray-100 text-textMuted hover:bg-gray-200"
                     }`}
                   >
-                    {selectedLanguages.includes(lang) && <Check size={14} className="inline mr-1" />}
+                    {selectedLanguages.includes(lang) && (
+                      <Check size={14} className="inline mr-1" />
+                    )}
                     {lang}
                   </button>
                 ))}
@@ -562,17 +600,179 @@ export default function OnboardPage() {
               <Lock size={14} /> We never store your exact address
             </p>
 
-            <Button onClick={() => goToStep(2)} className="w-full" disabled={!name.trim()}>
+            <Button
+              onClick={() => goToStep(2)}
+              className="w-full"
+              disabled={!name.trim()}
+            >
               Next <ArrowRight size={18} />
             </Button>
           </div>
         )}
 
-        {/* Step 2: Capabilities */}
+        {/* Step 2: Contact Details */}
         {step === 2 && (
           <div className="space-y-5 animate-fade-slide-up">
-            <h2 className="text-2xl font-bold text-textDark">What can you offer in an emergency?</h2>
-            <p className="text-textMuted">Don&apos;t worry — you probably have more to offer than you think.</p>
+            <h2 className="text-2xl font-bold text-textDark">
+              How should your cluster reach you in a crisis?
+            </h2>
+
+            <div>
+              <label className="block text-sm font-medium text-textDark mb-1">
+                Mobile Number <span className="text-danger">*</span>
+              </label>
+              <input
+                type="tel"
+                placeholder="+61 4XX XXX XXX"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                className="w-full rounded-xl border border-gray-200 px-4 py-3 focus:ring-2 focus:ring-accent/20 focus:border-accent transition-all outline-none"
+              />
+            </div>
+
+            <div className="p-4 border rounded-xl bg-gray-50/50 space-y-3">
+              <label className="flex items-center gap-2 text-sm font-medium text-textDark cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={whatsappSame}
+                  onChange={(e) => {
+                    setWhatsappSame(e.target.checked);
+                    if (e.target.checked) setWhatsapp("");
+                  }}
+                  className="rounded text-accent focus:ring-accent accent-accent w-4 h-4 cursor-pointer"
+                />
+                WhatsApp is the same as my mobile
+              </label>
+
+              {!whatsappSame && (
+                <div>
+                  <label className="block text-sm font-medium text-textDark mb-1">
+                    WhatsApp Number
+                  </label>
+                  <input
+                    type="tel"
+                    placeholder="+61 4XX XXX XXX"
+                    value={whatsapp}
+                    onChange={(e) => setWhatsapp(e.target.value)}
+                    className="w-full rounded-xl border border-gray-200 px-4 py-3 focus:ring-2 focus:ring-accent/20 focus:border-accent transition-all outline-none"
+                  />
+                </div>
+              )}
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-textDark mb-1">
+                  Emergency Contact Name
+                </label>
+                <input
+                  type="text"
+                  placeholder="Someone outside household"
+                  value={emergencyName}
+                  onChange={(e) => setEmergencyName(e.target.value)}
+                  className="w-full rounded-xl border border-gray-200 px-4 py-3 focus:ring-2 focus:ring-accent/20 focus:border-accent transition-all outline-none"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-textDark mb-1">
+                  Emergency Contact Phone
+                </label>
+                <input
+                  type="tel"
+                  placeholder="+61 XXX XXX XXX"
+                  value={emergencyPhone}
+                  onChange={(e) => setEmergencyPhone(e.target.value)}
+                  className="w-full rounded-xl border border-gray-200 px-4 py-3 focus:ring-2 focus:ring-accent/20 focus:border-accent transition-all outline-none"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-textDark mb-2">
+                Preferred contact method in crisis{" "}
+                <span className="text-danger">*</span>
+              </label>
+              <div className="flex flex-wrap gap-2">
+                {(["SMS", "WhatsApp", "Call", "App"] as const).map((method) => (
+                  <button
+                    key={method}
+                    onClick={() => setPreferredMethod(method)}
+                    className={`px-4 py-2 rounded-xl text-sm font-medium transition-colors border ${
+                      preferredMethod === method
+                        ? "bg-primary text-white border-primary"
+                        : "bg-white text-textDark border-gray-200 hover:bg-gray-50"
+                    }`}
+                  >
+                    {preferredMethod === method && (
+                      <Check size={14} className="inline mr-1" />
+                    )}
+                    {method}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-textDark mb-1">
+                Telegram username (optional)
+              </label>
+              <input
+                type="text"
+                placeholder="@username"
+                value={telegram}
+                onChange={(e) =>
+                  setTelegram(
+                    e.target.value.startsWith("@")
+                      ? e.target.value
+                      : e.target.value
+                      ? `@${e.target.value}`
+                      : ""
+                  )
+                }
+                className="w-full rounded-xl border border-gray-200 px-4 py-3 focus:ring-2 focus:ring-accent/20 focus:border-accent transition-all outline-none"
+              />
+            </div>
+
+            <p className="text-xs text-textMuted flex items-start gap-1.5 mt-2">
+              <Lock size={12} className="mt-0.5 shrink-0" />
+              Your contact details are only shared with your matched cluster
+              members. Never shown publicly.
+            </p>
+
+            <div className="flex gap-2 pt-2">
+              <Button variant="secondary" onClick={() => goToStep(1)} className="px-6">
+                Back
+              </Button>
+              <Button
+                onClick={() => {
+                  const phoneRegex = /^(?:\+61|0)[2-478](?:[ -]?[0-9]){8}$/;
+                  if (!phone.trim()) {
+                    toast.error("Please provide a mobile number");
+                    return;
+                  }
+                  if (!phoneRegex.test(phone.replace(/\s/g, ""))) {
+                    toast.error("Please enter a valid Australian mobile number");
+                    return;
+                  }
+                  goToStep(3);
+                }}
+                className="flex-1"
+              >
+                Next <ArrowRight size={18} />
+              </Button>
+            </div>
+          </div>
+        )}
+
+        {/* Step 3: Capabilities */}
+        {step === 3 && (
+          <div className="space-y-5 animate-fade-slide-up">
+            <h2 className="text-2xl font-bold text-textDark">
+              What can you offer in an emergency?
+            </h2>
+            <p className="text-textMuted">
+              Don&apos;t worry — you probably have more to offer than you think.
+            </p>
 
             <div className="grid grid-cols-2 gap-2">
               {CAPABILITY_OPTIONS.map((opt) => (
@@ -586,7 +786,9 @@ export default function OnboardPage() {
                   }`}
                 >
                   <span className="text-lg">{opt.icon}</span>
-                  <p className="font-medium text-textDark mt-1">{opt.label}</p>
+                  <p className="font-medium text-textDark mt-1">
+                    {opt.label}
+                  </p>
                   {selectedCaps.includes(opt.key) && (
                     <Check size={16} className="text-primary mt-1" />
                   )}
@@ -595,9 +797,12 @@ export default function OnboardPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-textDark mb-1">Tell us more (optional)</label>
+              <label className="block text-sm font-medium text-textDark mb-1">
+                Tell us more (optional)
+              </label>
               <textarea
-                value={capFreeText} onChange={(e) => setCapFreeText(e.target.value)}
+                value={capFreeText}
+                onChange={(e) => setCapFreeText(e.target.value)}
                 placeholder="e.g., I have a ute that fits 5 people, I'm a trained paramedic, I have a large water tank..."
                 rows={3}
                 className="w-full rounded-xl border border-gray-200 px-4 py-3 focus:ring-2 focus:ring-accent/20 focus:border-accent transition-all outline-none resize-none"
@@ -605,21 +810,26 @@ export default function OnboardPage() {
             </div>
 
             <div className="flex gap-3">
-              <Button variant="secondary" onClick={() => goToStep(1)}>
+              <Button variant="secondary" onClick={() => goToStep(2)}>
                 <ArrowLeft size={18} /> Back
               </Button>
-              <Button onClick={() => goToStep(3)} className="flex-1">
+              <Button onClick={() => goToStep(4)} className="flex-1">
                 Next <ArrowRight size={18} />
               </Button>
             </div>
           </div>
         )}
 
-        {/* Step 3: Needs */}
-        {step === 3 && (
+        {/* Step 4: Needs */}
+        {step === 4 && (
           <div className="space-y-5 animate-fade-slide-up">
-            <h2 className="text-2xl font-bold text-textDark">What might you need help with?</h2>
-            <p className="text-textMuted">There&apos;s no shame in needing help. That&apos;s what neighbours are for.</p>
+            <h2 className="text-2xl font-bold text-textDark">
+              What might you need help with?
+            </h2>
+            <p className="text-textMuted">
+              There&apos;s no shame in needing help. That&apos;s what neighbours
+              are for.
+            </p>
 
             <div className="grid grid-cols-2 gap-2">
               {NEED_OPTIONS.map((opt) => (
@@ -633,7 +843,9 @@ export default function OnboardPage() {
                   }`}
                 >
                   <span className="text-lg">{opt.icon}</span>
-                  <p className="font-medium text-textDark mt-1">{opt.label}</p>
+                  <p className="font-medium text-textDark mt-1">
+                    {opt.label}
+                  </p>
                   {selectedNeeds.includes(opt.key) && (
                     <Check size={16} className="text-accent mt-1" />
                   )}
@@ -642,20 +854,33 @@ export default function OnboardPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-textDark mb-1">Anything else we should know? (optional)</label>
+              <label className="block text-sm font-medium text-textDark mb-1">
+                Anything else we should know? (optional)
+              </label>
               <textarea
-                value={needFreeText} onChange={(e) => setNeedFreeText(e.target.value)}
+                value={needFreeText}
+                onChange={(e) => setNeedFreeText(e.target.value)}
                 placeholder="e.g., My mother lives with me, she's 82 and uses a wheelchair. She only speaks Vietnamese..."
                 rows={3}
                 className="w-full rounded-xl border border-gray-200 px-4 py-3 focus:ring-2 focus:ring-accent/20 focus:border-accent transition-all outline-none resize-none"
               />
             </div>
 
-            <div className="flex gap-3">
-              <Button variant="secondary" onClick={() => goToStep(2)}>
-                <ArrowLeft size={18} /> Back
+            <div className="flex gap-2 pt-2">
+              <Button
+                variant="secondary"
+                onClick={() => goToStep(3)}
+                className="px-6"
+                disabled={loading}
+              >
+                Back
               </Button>
-              <Button variant="accent" onClick={handleSubmit} className="flex-1">
+              <Button
+                variant="accent"
+                onClick={handleSubmit}
+                className="flex-1"
+                disabled={loading}
+              >
                 <Sparkles size={18} /> Find My Cluster
               </Button>
             </div>

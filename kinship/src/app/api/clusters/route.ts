@@ -181,7 +181,7 @@ export async function GET(req: NextRequest) {
     }
 
     const { data: members } = await sb
-      .from("cluster_members").select("*, profiles(id, name, email, suburb, postcode, lat, lng, approximate_location, household_size, languages, onboarding_complete, created_at)").eq("cluster_id", cluster.id);
+      .from("cluster_members").select("*, profiles(id, name, email, suburb, postcode, lat, lng, approximate_location, household_size, languages, phone, whatsapp, emergency_contact_name, emergency_contact_phone, preferred_contact_method, telegram_username, onboarding_complete, created_at)").eq("cluster_id", cluster.id);
 
     const { data: userProfile } = await sb.from("profiles").select("*").eq("id", userId).single();
 

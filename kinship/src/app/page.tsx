@@ -6,7 +6,7 @@ import { useKinshipStore } from "@/lib/store";
 import { saveAuthToOffline } from "@/lib/db";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
-import { Lock, Mail, ArrowRight, UserPlus, LogIn, AlertCircle, Eye, EyeOff } from "lucide-react";
+import { Lock, Mail, ArrowRight, UserPlus, LogIn, AlertCircle, Eye, EyeOff, Phone as PhoneIcon } from "lucide-react";
 
 type AuthMode = "choose" | "signup" | "signin";
 
@@ -18,6 +18,7 @@ export default function AuthLandingPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
@@ -43,6 +44,7 @@ export default function AuthLandingPage() {
           email: email.trim().toLowerCase(),
           password,
           name: name.trim(),
+          phone: phone.trim() || undefined,
           suburb: "Footscray",
           postcode: "3011",
           lat: -37.7996,
@@ -217,6 +219,20 @@ export default function AuthLandingPage() {
                 className="w-full rounded-lg border border-gray-200 px-4 py-3 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none"
                 autoFocus
               />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-textDark mb-1">Mobile (optional)</label>
+              <div className="relative">
+                <PhoneIcon size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-textMuted" />
+                <input
+                  type="tel"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  placeholder="0412 345 678"
+                  className="w-full rounded-lg border border-gray-200 pl-10 pr-4 py-3 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none"
+                />
+              </div>
             </div>
 
             <div>

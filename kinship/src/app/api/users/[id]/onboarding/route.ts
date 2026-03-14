@@ -27,6 +27,12 @@ export async function POST(
       approximate_location,
       household_size,
       languages,
+      phone,
+      whatsapp,
+      emergency_contact_name,
+      emergency_contact_phone,
+      preferred_contact_method,
+      telegram_username,
       raw_capabilities_text,
       raw_needs_text,
     } = body;
@@ -65,13 +71,19 @@ export async function POST(
         approximate_location: approximate_location || "",
         household_size: household_size || 1,
         languages: languages || ["English"],
+        phone: phone || null,
+        whatsapp: whatsapp || null,
+        emergency_contact_name: emergency_contact_name || null,
+        emergency_contact_phone: emergency_contact_phone || null,
+        preferred_contact_method: preferred_contact_method || null,
+        telegram_username: telegram_username || null,
         raw_capabilities_text: raw_capabilities_text || "",
         raw_needs_text: raw_needs_text || "",
         onboarding_complete: true,
       })
       .eq("id", userId)
       .select(
-        "id, name, email, suburb, postcode, lat, lng, approximate_location, household_size, languages, raw_capabilities_text, raw_needs_text, onboarding_complete, created_at"
+        "id, name, email, suburb, postcode, lat, lng, approximate_location, household_size, languages, phone, whatsapp, emergency_contact_name, emergency_contact_phone, preferred_contact_method, telegram_username, raw_capabilities_text, raw_needs_text, onboarding_complete, created_at"
       )
       .single();
 
