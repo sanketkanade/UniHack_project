@@ -58,7 +58,7 @@ export async function POST(
       .from("profiles")
       .update({
         name: name || undefined,
-        suburb: suburb || "Footscray",
+        suburb: suburb ? suburb.trim() : "Footscray",
         postcode: postcode || "3011",
         lat: fuzzed.lat,
         lng: fuzzed.lng,

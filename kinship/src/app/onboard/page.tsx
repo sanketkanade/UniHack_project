@@ -51,6 +51,77 @@ const SUBURB_COORDS: Record<string, { lat: number; lng: number }> = {
   doncaster: { lat: -37.7850, lng: 145.1264 },
   heidelberg: { lat: -37.7567, lng: 145.0679 },
   ivanhoe: { lat: -37.7694, lng: 145.0454 },
+  "moorabbin": { lat: -37.9284, lng: 145.0594 },
+  "bentleigh": { lat: -37.9167, lng: 145.0333 },
+  "cheltenham": { lat: -37.9500, lng: 145.0667 },
+  "highett": { lat: -37.9333, lng: 145.0500 },
+  "sandringham": { lat: -37.9500, lng: 145.0000 },
+  "elsternwick": { lat: -37.8833, lng: 145.0000 },
+  "glen waverley": { lat: -37.8772, lng: 145.1635 },
+  "clayton": { lat: -37.9167, lng: 145.1167 },
+  "oakleigh": { lat: -37.8997, lng: 145.0876 },
+  "caulfield": { lat: -37.8767, lng: 145.0231 },
+  "dandenong": { lat: -37.9878, lng: 145.2150 },
+  "frankston": { lat: -38.1440, lng: 145.1210 },
+  "ringwood": { lat: -37.8150, lng: 145.2270 },
+  "box hill": { lat: -37.8193, lng: 145.1266 },
+  "glen iris": { lat: -37.8660, lng: 145.0500 },
+  "malvern": { lat: -37.8667, lng: 145.0167 },
+  "toorak": { lat: -37.8444, lng: 145.0167 },
+  "armadale": { lat: -37.8560, lng: 145.0167 },
+  "windsor": { lat: -37.8570, lng: 144.9920 },
+  "elwood": { lat: -37.8830, lng: 144.9870 },
+  "middle park": { lat: -37.8500, lng: 144.9600 },
+  "albert park": { lat: -37.8400, lng: 144.9570 },
+  "south melbourne": { lat: -37.8330, lng: 144.9620 },
+  "docklands": { lat: -37.8150, lng: 144.9450 },
+  "north melbourne": { lat: -37.8000, lng: 144.9490 },
+  "west melbourne": { lat: -37.8050, lng: 144.9410 },
+  "essendon": { lat: -37.7490, lng: 144.9200 },
+  "moonee ponds": { lat: -37.7650, lng: 144.9200 },
+  "pascoe vale": { lat: -37.7283, lng: 144.9445 },
+  "glenroy": { lat: -37.7050, lng: 144.9320 },
+  "reservoir": { lat: -37.7194, lng: 145.0119 },
+  "templestowe": { lat: -37.7538, lng: 145.1461 },
+  "greensborough": { lat: -37.7053, lng: 145.1042 },
+  "bundoora": { lat: -37.7017, lng: 145.0631 },
+  "epping": { lat: -37.6456, lng: 145.0133 },
+  "croydon": { lat: -37.7950, lng: 145.2810 },
+  "boronia": { lat: -37.8617, lng: 145.2856 },
+  "ferntree gully": { lat: -37.8798, lng: 145.2939 },
+  "knoxfield": { lat: -37.8800, lng: 145.2300 },
+  "bayswater": { lat: -37.8453, lng: 145.2680 },
+  "wantirna": { lat: -37.8467, lng: 145.2317 },
+  "mitcham": { lat: -37.8150, lng: 145.1990 },
+  "vermont": { lat: -37.8395, lng: 145.1900 },
+  "nunawading": { lat: -37.8181, lng: 145.1782 },
+  "blackburn": { lat: -37.8186, lng: 145.1510 },
+  "forest hill": { lat: -37.8370, lng: 145.1720 },
+  "mount waverley": { lat: -37.8765, lng: 145.1313 },
+  "chadstone": { lat: -37.8869, lng: 145.0876 },
+  "huntingdale": { lat: -37.9000, lng: 145.0933 },
+  "murrumbeena": { lat: -37.9015, lng: 145.0580 },
+  "carnegie": { lat: -37.8950, lng: 145.0550 },
+  "glen huntly": { lat: -37.8930, lng: 145.0450 },
+  "ormond": { lat: -37.9000, lng: 145.0320 },
+  "mckinnon": { lat: -37.9117, lng: 145.0433 },
+  "bentleigh east": { lat: -37.9317, lng: 145.0533 },
+  "heatherton": { lat: -37.9500, lng: 145.0833 },
+  "braeside": { lat: -37.9667, lng: 145.0833 },
+  "dingley village": { lat: -37.9833, lng: 145.1167 },
+  "springvale": { lat: -37.9500, lng: 145.1500 },
+  "noble park": { lat: -37.9667, lng: 145.1667 },
+  "keysborough": { lat: -37.9967, lng: 145.1733 },
+  "patterson lakes": { lat: -38.0350, lng: 145.1150 },
+  "carrum": { lat: -38.0667, lng: 145.1167 },
+  "seaford": { lat: -38.1000, lng: 145.1333 },
+  "chelsea": { lat: -38.0500, lng: 145.1167 },
+  "mentone": { lat: -37.9833, lng: 145.0667 },
+  "parkdale": { lat: -37.9833, lng: 145.0500 },
+  "mordialloc": { lat: -37.9967, lng: 145.0833 },
+  "aspendale": { lat: -38.0167, lng: 145.1000 },
+  "edithvale": { lat: -38.0333, lng: 145.1000 },
+  "bonbeach": { lat: -38.0500, lng: 145.1167 },
 };
 
 const LANGUAGES = [
@@ -177,8 +248,8 @@ export default function OnboardPage() {
       };
     }
     return {
-      lat: -37.7996 + (Math.random() - 0.5) * 0.005,
-      lng: 144.8994 + (Math.random() - 0.5) * 0.005,
+      lat: -37.8136 + (Math.random() - 0.5) * 0.005,
+      lng: 144.9631 + (Math.random() - 0.5) * 0.005,
     };
   };
 
@@ -271,6 +342,19 @@ export default function OnboardPage() {
       }
 
       // 3. POST /api/clusters to generate/join cluster for this user's suburb
+      try {
+        await fetch(`/api/clusters`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${authToken}`,
+          },
+          body: JSON.stringify({ suburb, postcode }),
+        });
+      } catch (err) {
+        console.error("Cluster generation failed:", err);
+      }
+
       const clusterRes = await fetch(`/api/clusters?user_id=${userId}`, {
         headers: { "Authorization": `Bearer ${authToken}` },
       });

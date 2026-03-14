@@ -18,8 +18,9 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Database not configured" }, { status: 503 });
     }
 
+    const normalizedSuburb = (suburb || "Footscray").trim();
     const { data: dbProfiles } = await sb
-      .from("profiles").select("id, name, lat, lng, languages").eq("suburb", suburb || "Footscray");
+      .from("profiles").select("id, name, lat, lng, languages").ilike("suburb", normalizedSuburb);
 
     let profiles: Array<{
       id: string; name: string; lat: number; lng: number;
@@ -85,12 +86,12 @@ export async function POST(req: NextRequest) {
     }
 
     // Delete existing clusters for this suburb
-    const { data: existingClusters } = await sb.from("clusters").select("id").eq("suburb", suburb || "Footscray");
+    const { data: existingClusters } = await sb.from("clusters").select("id").ilike("suburb", normalizedSuburb);
     if (existingClusters) {
       for (const c of existingClusters) {
         await sb.from("cluster_members").delete().eq("cluster_id", c.id);
       }
-      await sb.from("clusters").delete().eq("suburb", suburb || "Footscray");
+      await sb.from("clusters").delete().ilike("suburb", normalizedSuburb);
     }
 
     // Save to database

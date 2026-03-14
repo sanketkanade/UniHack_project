@@ -5,6 +5,7 @@ import { useEffect, useMemo } from "react";
 import L from "leaflet";
 import { FLOOD_ZONE_GEOJSON } from "@/data/flood-zones";
 import { formatDistance, haversineDistance, getCategoryIcon } from "@/lib/utils";
+import { useKinshipStore } from "@/lib/store";
 import type { Cluster } from "@/types";
 
 const CLUSTER_COLORS = [
@@ -55,9 +56,11 @@ export default function NeighbourhoodMap({
   isCrisis = false,
 }: NeighbourhoodMapProps) {
   // Dynamically compute the map center from cluster data or current user
+  const currentUser = useKinshipStore((state) => state.currentUser);
+  
   const mapCenter = useMemo(() => {
     const members = cluster?.members || [];
-    // Try to center on current user first
+    // Try to center on current user in cluster first
     const currentMember = members.find((m) => m.user_id === currentUserId);
     if (currentMember) {
       return { lat: currentMember.profile.lat, lng: currentMember.profile.lng };
@@ -68,9 +71,14 @@ export default function NeighbourhoodMap({
       const avgLng = members.reduce((sum, m) => sum + m.profile.lng, 0) / members.length;
       return { lat: avgLat, lng: avgLng };
     }
-    // Final fallback to Footscray
-    return { lat: -37.7996, lng: 144.8994 };
-  }, [cluster, currentUserId]);
+    // If no cluster, try to center on the logged-in user's own profile coordinates
+    if (currentUser?.lat && currentUser?.lng) {
+      return { lat: currentUser.lat, lng: currentUser.lng };
+    }
+    
+    // Final fallback to Melbourne CBD
+    return { lat: -37.8136, lng: 144.9631 };
+  }, [cluster, currentUserId, currentUser]);
 
   // Get cluster member positions for lines
   const members = cluster?.members || [];
